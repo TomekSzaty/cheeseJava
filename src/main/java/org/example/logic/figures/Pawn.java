@@ -4,6 +4,7 @@ import org.example.Figure;
 import org.example.logic.FigureColour;
 import org.example.logic.FigureMove;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn implements Figure {
@@ -21,7 +22,16 @@ public class Pawn implements Figure {
 
     @Override
     public List<FigureMove> getPossibleMoves() {
-        return null;
+        List<FigureMove> moves = new ArrayList<>();
+        moves.add(new FigureMove(0, 1, true, false, false));
+        moves.add(new FigureMove(0, 2, true, false, true));
+        moves.add(new FigureMove(-1, 1, true, true, false));
+        moves.add(new FigureMove(1, 1, true, true, false));
+        moves.add(new FigureMove(0, -1, true, false, false));
+        moves.add(new FigureMove(0, -2, true, false, true));
+        moves.add(new FigureMove(-1, -1, true, true, false));
+        moves.add(new FigureMove(1, -1, true, true, false));
+        return moves;
     }
 
     @Override
