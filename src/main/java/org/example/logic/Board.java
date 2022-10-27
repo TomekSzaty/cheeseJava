@@ -44,8 +44,13 @@ public class Board {
         setFigure(0, row, new Rook(colour));
         setFigure(1, row, new Knight(colour));
         setFigure(2, row, new Bishop(colour));
-        setFigure(3, row, new Queen(colour));
-        setFigure(4, row, new King(colour));
+        if (boardOrientation == BoardOrientation.WHITE_ON_TOP) {
+            setFigure(4, row, new Queen(colour));
+            setFigure(3, row, new King(colour));
+        }else {
+            setFigure(3, row, new Queen(colour));
+            setFigure(4, row, new King(colour));
+        }
         setFigure(5, row, new Bishop(colour));
         setFigure(6, row, new Knight(colour));
         setFigure(7, row, new Rook(colour));
