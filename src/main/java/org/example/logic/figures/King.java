@@ -24,7 +24,7 @@ public class King implements Figure {
     public List<FigureMove> getPossibleMoves() {
         List<FigureMove> moves = new ArrayList<>();
         addKingMoves(moves, false);
-        addKingMoves(moves, false);
+        addKingMoves(moves, true);
         return moves;
     }
 
@@ -45,6 +45,6 @@ public class King implements Figure {
     }
 
     private String getColourSymbol() {
-        return (colour == FigureColour.WHITE) ? "W" : "B";
+        return (colour == FigureColour.WHITE) ? "w" : "b";
     }
 }

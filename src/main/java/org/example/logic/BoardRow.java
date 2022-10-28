@@ -6,10 +6,10 @@ import org.example.logic.figures.None;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardRows {
+public class BoardRow {
     private final List<Figure> cols = new ArrayList<>();
 
-    public BoardRows() {
+    public BoardRow() {
         for (int col = 0; col < 8 ; col++)
             cols.add(new None());
     }
@@ -22,7 +22,7 @@ public class BoardRows {
     public String toString() {
         String s = "|";
         for (int col = 0; col < 8; col++)
-            s += cols.get(col) + "|";
+            s += cols.get(col) +  "|";
             s += "\n";
         return s;
     }

@@ -3,10 +3,10 @@ package org.example.logic;
 public class FigureMove {
     private final int col;
     private final int row;
+    private final boolean onlyInColorDirection;
     private final boolean haveToCapture;
     private final boolean haveToBeFirstMove;
-    private boolean canJump;
-    private final boolean onlyInColorDirection;
+    private final boolean canJump;
 
     public FigureMove(int col, int row, boolean onlyInColorDirection, boolean haveToCapture, boolean haveToBeFirstMove) {
         this.col = col;
@@ -47,7 +47,7 @@ public class FigureMove {
         return row;
     }
 
-    public boolean isCanJump() {
+public boolean isCanJump() {
         return canJump;
     }
 }

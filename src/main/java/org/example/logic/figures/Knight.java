@@ -23,8 +23,8 @@ public class Knight implements Figure {
     @Override
     public List<FigureMove> getPossibleMoves() {
         List<FigureMove> moves = new ArrayList<>();
-        addKnightMoves(moves, true);
         addKnightMoves(moves, false);
+        addKnightMoves(moves, true);
         return moves;
     }
 
@@ -45,6 +45,6 @@ public class Knight implements Figure {
     }
 
     private String getColourSymbol() {
-        return (colour == FigureColour.WHITE) ? "W" : "B";
+        return (colour == FigureColour.WHITE) ? "w" : "b";
     }
 }

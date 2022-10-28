@@ -8,17 +8,19 @@ import java.util.List;
 
 public class Board {
     private BoardOrientation boardOrientation = BoardOrientation.WHITE_ON_TOP;
+    private boolean gameWithComputer;
     private FigureColour whoseMove = FigureColour.WHITE;
-    private final List<BoardRows> rows = new ArrayList<>();
+    private final List<BoardRow> rows = new ArrayList<>();
 
-    public Board(BoardOrientation boardOrientation) {
+    public Board(BoardOrientation boardOrientation, boolean gameWithComputer) {
         this();
         this.boardOrientation = boardOrientation;
+        this.gameWithComputer = gameWithComputer;
     }
 
     public Board() {
         for (int row = 0; row < 8; row++)
-            rows.add(new BoardRows());
+            rows.add(new BoardRow());
     }
 
     public void init() {
@@ -47,7 +49,7 @@ public class Board {
         if (boardOrientation == BoardOrientation.WHITE_ON_TOP) {
             setFigure(4, row, new Queen(colour));
             setFigure(3, row, new King(colour));
-        }else {
+        } else {
             setFigure(3, row, new Queen(colour));
             setFigure(4, row, new King(colour));
         }
@@ -66,6 +68,7 @@ public class Board {
 
     public boolean move(Move move) {
         boolean result = true;
+        result = result && isTargetOnBoard(move);
         result = result && checkIfMovingFigure(move);
         result = result && checkFigureColor(move);
         result = result && targetFieldIsEmptyOrEnemy(move);
@@ -79,6 +82,10 @@ public class Board {
         return result;
     }
 
+    private boolean isTargetOnBoard(Move move) {
+        return move.getDestCol() >= 0 && move.getDestCol() <= 7 && move.getDestRow() >= 0 && move.getDestRow() <= 7;
+    }
+
     private boolean targetFieldIsEmptyOrEnemy(Move move) {
         return (getFigure(move.getDestCol(), move.getDestRow()) instanceof None) ||
                 (getFigure(move.getDestCol(), move.getDestRow()).getColour() != whoseMove);
@@ -87,33 +94,33 @@ public class Board {
     private boolean isValidMove(Move move) {
         boolean isCapture = !(getFigure(move.getDestCol(), move.getDestRow()) instanceof None);
         int deltaCol = move.getDestCol() - move.getSourceCol();
-        int deltaRow = move.getDestRow() - move.getSourceCol();
-        boolean isMoveIsColorDirection = isMoveIsColorDirection(move);
+        int deltaRow = move.getDestRow() - move.getSourceRow();
+        boolean isMoveInColorDirection = isMoveInColorDirection(move);
         return getFigure(move.getSourceCol(), move.getSourceRow()).getPossibleMoves().stream()
                 .filter(pm -> pm.getCol() == deltaCol)
                 .filter(pm -> pm.getRow() == deltaRow)
                 .filter(pm -> pm.isHaveToCapture() == isCapture)
-                .filter(pm -> !pm.isOnlyInColorDirection() || isMoveIsColorDirection)
-                .findAny()
+                .filter(pm -> !pm.isOnlyInColorDirection() || isMoveInColorDirection)
+                .findFirst()
                 .isPresent();
     }
 
-    private boolean isMoveIsColorDirection(Move move) {
-        boolean isMoveIsColorDirection;
+    private boolean isMoveInColorDirection(Move move) {
+        boolean isMoveInColorDirection;
         if (boardOrientation == BoardOrientation.WHITE_ON_TOP) {
             if (getFigure(move.getSourceCol(), move.getSourceRow()).getColour() == FigureColour.WHITE) {
-                isMoveIsColorDirection = (move.getDestRow() > move.getSourceRow());
+                isMoveInColorDirection = (move.getDestRow() > move.getSourceRow());
             } else {
-                isMoveIsColorDirection = (move.getDestRow() < move.getSourceRow());
+                isMoveInColorDirection = (move.getDestRow() < move.getSourceRow());
             }
         } else {
             if (getFigure(move.getSourceCol(), move.getSourceRow()).getColour() == FigureColour.WHITE) {
-                isMoveIsColorDirection = (move.getDestRow() < move.getSourceRow());
+                isMoveInColorDirection = (move.getDestRow() < move.getSourceRow());
             } else {
-                isMoveIsColorDirection = (move.getDestRow() > move.getSourceRow());
+                isMoveInColorDirection = (move.getDestRow() > move.getSourceRow());
             }
         }
-        return isMoveIsColorDirection;
+        return isMoveInColorDirection;
     }
 
     private boolean checkFigureColor(Move move) {
@@ -126,11 +133,34 @@ public class Board {
 
     @Override
     public String toString() {
-        String s = "|--|--|--|--|--|--|--|--|\n";
+        String s = "|0-|1-|2-|3-|4-|5-|6-|7-|\n";
         for (int row = 0; row < 8; row++)
             s += rows.get(row).toString();
         s += "|--|--|--|--|--|--|--|--|\n";
         s += "Next Move: " + whoseMove;
         return s;
+    }
+
+    public boolean isGameWithComputer() {
+        return gameWithComputer;
+    }
+
+    public BoardOrientation getBoardOrientation() {
+        return boardOrientation;
+    }
+
+    public Board deepCopy() {
+        Board newBoard = new Board(boardOrientation, gameWithComputer);
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Figure figure = getFigure(col, row);
+                if (!(figure instanceof None)) {
+                    Figure newFigure = FigureFactory.createFigureCopy(figure);
+                    newBoard.setFigure(col, row, newFigure);
+                }
+            }
+        }
+        newBoard.whoseMove = whoseMove;
+        return newBoard;
     }
 }

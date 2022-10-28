@@ -53,6 +53,6 @@ public class Queen implements Figure {
     }
 
     private String getColourSymbol() {
-        return (colour == FigureColour.WHITE) ? "W" : "B";
+        return (colour == FigureColour.WHITE) ? "w" : "b";
     }
 }

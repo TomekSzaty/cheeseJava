@@ -25,7 +25,6 @@ public class Rook implements Figure {
         List<FigureMove> moves = new ArrayList<>();
         addRookMoves(moves, true);
         addRookMoves(moves, false);
-
         return moves;
     }
 
@@ -46,6 +45,6 @@ public class Rook implements Figure {
     }
 
     private String getColourSymbol() {
-        return (colour == FigureColour.WHITE) ? "W" : "B";
+        return (colour == FigureColour.WHITE) ? "w" : "b";
     }
 }
